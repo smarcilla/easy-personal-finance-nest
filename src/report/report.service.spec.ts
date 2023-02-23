@@ -7,18 +7,25 @@ jest.mock('../easy-finance/easy-finance.service', () => ({
 }));
 
 import { Test, TestingModule } from '@nestjs/testing';
+import { TransactionService } from '../transaction/transaction.service';
 import { EasyFinanceService } from '../easy-finance/easy-finance.service';
-import { TransactionService } from './transaction.service';
+import { ReportHelper } from './report.helper';
+import { ReportService } from './report.service';
 
-describe('TransactionService', () => {
-  let service: TransactionService;
+describe('ReportService', () => {
+  let service: ReportService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [TransactionService, EasyFinanceService],
+      providers: [
+        TransactionService,
+        ReportService,
+        EasyFinanceService,
+        ReportHelper,
+      ],
     }).compile();
 
-    service = module.get<TransactionService>(TransactionService);
+    service = module.get<ReportService>(ReportService);
   });
 
   test('should be defined', () => {

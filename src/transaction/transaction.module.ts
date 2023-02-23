@@ -7,5 +7,6 @@ import { TransactionController } from './transaction.controller';
   imports: [EasyFinanceModule],
   providers: [TransactionService],
   controllers: [TransactionController],
+  exports: [TransactionService],
 })
 export class TransactionModule {}
