@@ -6,6 +6,14 @@ jest.mock('../easy-finance/easy-finance.service', () => ({
     .mockImplementation(() => mockEasyFinanceService),
 }));
 
+const mockGet = jest.fn();
+const mockSet = jest.fn();
+
+const mockCache = {
+  get: mockGet,
+  set: mockSet,
+};
+
 import { Test, TestingModule } from '@nestjs/testing';
 import { TransactionService } from '../transaction/transaction.service';
 import { EasyFinanceService } from '../easy-finance/easy-finance.service';
@@ -22,6 +30,7 @@ describe('ReportService', () => {
         ReportService,
         EasyFinanceService,
         ReportHelper,
+        { provide: 'CACHE_MANAGER', useValue: mockCache },
       ],
     }).compile();
 
