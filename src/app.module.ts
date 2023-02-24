@@ -1,3 +1,4 @@
+import { redisStore } from 'cache-manager-redis-store';
 import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -10,7 +11,20 @@ import { ReportModule } from './report/report.module';
     EasyFinanceModule,
     TransactionModule,
     ReportModule,
-    CacheModule.register({ ttl: 60 * 1000, isGlobal: true }),
+    CacheModule.register({
+      isGlobal: true,
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      // https://github.com/dabroek/node-cache-manager-redis-store/issues/40#issuecomment-1285462192
+      store: async () => {
+        return await redisStore({
+          socket: {
+            host: 'localhost',
+            port: 6379,
+          },
+        });
+      },
+    }),
   ],
   controllers: [AppController],
   providers: [
