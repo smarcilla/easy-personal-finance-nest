@@ -9,8 +9,8 @@ export class ReportService {
     private reportHelper: ReportHelper,
   ) {}
 
-  findAll() {
-    const transactions = this.transactionService.find();
+  async findAll() {
+    const transactions = await this.transactionService.find();
 
     const balanceReport = this.reportHelper
       .getBalanceSheetService(transactions)

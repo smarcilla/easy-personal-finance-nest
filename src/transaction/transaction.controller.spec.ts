@@ -15,9 +15,12 @@ import { TransactionController } from './transaction.controller';
 import { TransactionService } from './transaction.service';
 
 describe('TransactionController', () => {
+  const transactions = [];
   let controller: TransactionController;
 
   beforeEach(async () => {
+    mockFind.mockResolvedValue(transactions);
+
     const module: TestingModule = await Test.createTestingModule({
       controllers: [TransactionController],
       providers: [TransactionService],
@@ -26,14 +29,11 @@ describe('TransactionController', () => {
     controller = module.get<TransactionController>(TransactionController);
   });
 
-  it('should be defined', () => {
+  test('should be defined', () => {
     expect(controller).toBeDefined();
   });
 
-  test('should return an array of transactions', () => {
-    const transactions = [];
-    mockFind.mockReturnValue(transactions);
-
-    expect(controller.find()).toBe(transactions);
+  test('should return an array of transactions', async () => {
+    expect(await controller.find()).toBe(transactions);
   });
 });
