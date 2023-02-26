@@ -1,10 +1,11 @@
 import { redisStore } from 'cache-manager-redis-store';
-import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EasyFinanceModule } from './easy-finance/easy-finance.module';
 import { TransactionModule } from './transaction/transaction.module';
 import { ReportModule } from './report/report.module';
+import { FinanceStoreModule } from './finance-store/finance-store.module';
 
 @Module({
   imports: [
@@ -25,11 +26,9 @@ import { ReportModule } from './report/report.module';
         });
       },
     }),
+    FinanceStoreModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: 'APP_INTERCEPTOR', useClass: CacheInterceptor },
-  ],
+  providers: [AppService],
 })
 export class AppModule {}
