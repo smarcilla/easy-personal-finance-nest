@@ -1,6 +1,6 @@
 import {
-  CacheKey,
   Controller,
+  Delete,
   Get,
   Post,
   UploadedFiles,
@@ -9,7 +9,6 @@ import {
 
 import { AnyFilesInterceptor } from '@nestjs/platform-express';
 import { FileData } from 'easy-personal-finance/lib/types/transactions.type';
-import { TRANSACTION_FIND_CACHE_KEY } from '../common/constants';
 import { TransactionFilePipe } from './files.pipe';
 import { TransactionService } from './transaction.service';
 
@@ -18,7 +17,6 @@ export class TransactionController {
   constructor(private service: TransactionService) {}
 
   @Get()
-  @CacheKey(TRANSACTION_FIND_CACHE_KEY)
   find() {
     return this.service.find();
   }
@@ -29,5 +27,10 @@ export class TransactionController {
     @UploadedFiles(TransactionFilePipe) files: Array<FileData>,
   ) {
     this.service.importTransactions(files);
+  }
+
+  @Delete()
+  removeAll() {
+    this.service.removeAll();
   }
 }

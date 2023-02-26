@@ -6,16 +6,16 @@ jest.mock('../easy-finance/easy-finance.service', () => ({
     .mockImplementation(() => mockEasyFinanceService),
 }));
 
-const mockGet = jest.fn();
-const mockSet = jest.fn();
+const mockFinanceStoreService = {};
 
-const mockCache = {
-  get: mockGet,
-  set: mockSet,
-};
+jest.mock('../finance-store/finance-store.service', () => ({
+  FinanceStoreService: jest
+    .fn()
+    .mockImplementation(() => mockFinanceStoreService),
+}));
 
-import { CACHE_MANAGER } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
+import { FinanceStoreService } from '../finance-store/finance-store.service';
 import { EasyFinanceService } from '../easy-finance/easy-finance.service';
 import { TransactionService } from './transaction.service';
 
@@ -24,14 +24,8 @@ describe('TransactionService', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        TransactionService,
-        EasyFinanceService,
-        { provide: CACHE_MANAGER, useValue: mockCache },
-      ],
+      providers: [TransactionService, EasyFinanceService, FinanceStoreService],
     }).compile();
-
-    mockGet.mockResolvedValue(undefined);
 
     service = module.get<TransactionService>(TransactionService);
   });
