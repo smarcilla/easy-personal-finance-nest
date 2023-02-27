@@ -2,7 +2,9 @@ import {
   Controller,
   Delete,
   Get,
+  ParseIntPipe,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -17,8 +19,13 @@ export class TransactionController {
   constructor(private service: TransactionService) {}
 
   @Get()
-  find() {
-    return this.service.find();
+  find(
+    @Query('searchText') searchText?: string,
+    @Query('sort') sort = 'date:asc',
+    @Query('page', ParseIntPipe) page = 1,
+    @Query('perPage', ParseIntPipe) perPage = 20,
+  ) {
+    return this.service.find({ searchText, sort, page, perPage });
   }
 
   @Post('import')
